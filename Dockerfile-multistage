@@ -1,0 +1,16 @@
+FROM golang AS build
+
+WORKDIR /opt/app
+
+COPY . .
+
+RUN make build-linux
+
+
+FROM alpine
+
+WORKDIR /opt
+
+COPY --from=build /opt/app/out/ ./dist
+
+CMD ["./dist/go-app"]
